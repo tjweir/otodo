@@ -2,10 +2,48 @@
 (* Oreilly book has a model of a db *)
 (* How do I use modules like Arg? *)
 
+(*
 type data_card = string array ;;
 type data_base = {card_index : string -> int; data : data_card list } ;;
+*)
 
-print_string "Hello from otodo\n";
-for i = 1 to Array.length Sys.argv - 1
-do print_string Sys.argv.(i); print_char ' ' done;
-print_newline();;
+open Getopt
+open Printf
+
+let archive = ref false
+and update  = ref false
+and verbose = ref 0
+and includ  = ref []
+and output  = ref ""
+
+let bip ()  = Printf.printf "\007"; flush stdout
+let wait () = Unix.sleep 1 
+
+let specs = 
+[
+  ( 'x', "execute", None, Some (fun x -> Printf.printf "execute %s\n" x));
+  ( 'I', "include", None, (append includ));
+  ( 'o', "output",  None, (atmost_once output (Error "only one output")));
+  ( 'a', "archive", (set archive true), None);
+  ( 'u', "update",  (set update  true), None);
+  ( 'v', "verbose", (incr verbose), None);
+  ( 'X', "",        Some bip, None);
+  ( 'w', "wait",    Some wait, None)
+
+]
+
+let _ = 
+  parse_cmdline specs print_endline;
+
+  Printf.printf "archive = %b\n" !archive;
+  Printf.printf "update  = %b\n" !update;
+  Printf.printf "verbose = %i\n" !verbose;
+  Printf.printf "output  = %s\n" !output;
+  List.iter (fun x -> Printf.printf "include %s\n" x) !includ;;
+
+(*
+let _ =
+  for i = 0 to Array.length Sys.argv - 1 do
+    printf "[%i] %s\n" i Sys.argv.(i)
+  done
+*)
