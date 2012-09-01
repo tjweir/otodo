@@ -1,11 +1,11 @@
 # List
-otodo list
+otodo (--list | -l)
 # Add
-otodo add "This is the task info"
+otodo (--add | -a) "This is the task info"
 # Complete task <id>
-otodo complete <id>
+otodo (--complete | -a) <id>
 # Edit the details of task <id>
-otodo edit <id> "This is the new task info"
+otodo (--edit | -e) <id> "This is the new task info"
 # Delete task <id>
-otodo delete <id>
+otodo (--delete | -d) <id>
 
